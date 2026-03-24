@@ -63,15 +63,12 @@ vmDefaults:
 # in an overrides file.
 vms: {}
 
-externalDataVolumes: {}
-# EXAMPLE externalDataVolumes:
-
-# Example pulled from quay
-#   - name: quay-windows
-#     type: registry
-#     url: "docker://quay.io/eduffy/win2k22-dv:thin"
-#     size: 50G
-#     registryCredentialsSecret: quay-creds # You will need to create this with your creds
+externalDataVolumes:
+  - name: quay-ubuntu
+    type: registry
+    url: "docker://quay.io/eduffy/ubuntu-2404-dv:thin"
+    size: 50G
+    registryCredentialsSecret: quay-creds # You will need to create this with your creds
 
 # Example downloaded from url
 #    - name: ubuntu-installer
