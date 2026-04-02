@@ -14,7 +14,7 @@ metadata:
     {{ $def.externalDataVolumeAnnodations | toYaml }}
   {{- end }}
   {{- if $edv.annotations }}
-    {{ $edv.annotations |toYaml }} // FIXME is this going to cause issues if the same label appears twice?
+    {{ $edv.annotations |toYaml }}
   {{- end }}
 spec:
   source:
