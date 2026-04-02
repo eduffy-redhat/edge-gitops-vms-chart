@@ -85,6 +85,10 @@ externalDataVolumes: {}
 #      size: 10G
 
 
+# This field will disable ExternalSecrets for fetching SSH Authorized Keys and
+# CloudInit configuration. If registry credentials are specified in
+# registryCredentialExternalSecrets then they will be fetched using an
+# ExternalSecret regardless of what this field is set to
 disableExternalSecrets: true
 
 serviceAccountName: ansible-edge-gitops-sa
