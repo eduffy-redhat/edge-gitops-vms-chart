@@ -140,6 +140,14 @@ spec:
                 secretName: authorizedsshkeys-{{ $identifier }}
       {{- end }}
       domain:
+      {{- if coalesce $vmr.efi $def.efi }}
+        firmware:
+          bootloader:
+            efi: {}
+        features:
+          smm:
+            enabled: true
+      {{- end }}
         cpu:
           cores: {{ coalesce $vmr.cores $def.cores }}
           sockets: {{ coalesce $vmr.sockets $def.sockets }}
