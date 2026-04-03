@@ -158,7 +158,7 @@ spec:
           {{- end }}
           disks:
           - disk:
-              bus: virtio
+              bus: {{ coalesce $def.mainDiskStorageBus $vmr.mainDiskStorageBus }}
             name: {{ $identifier }}
           {{- if not $.Values.disableExternalSecrets }}
           - disk:

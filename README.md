@@ -1,6 +1,6 @@
 # edge-gitops-vms
 
-![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.3](https://img.shields.io/badge/Version-0.3.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Edge GitOps VMs
 
@@ -8,6 +8,7 @@ This chart is used to set up Edge GitOps VMs in conjunction with OpenShift Virtu
 
 ### Notable changes
 
+* v0.3.3: Allow configuraton of main disk storage bus. Default to virtio but Windows benefits from sata
 * v0.3.2: Add EFI as an option as either a default or vm-specific option
 * v0.3.1: Fix some templating errors
 * v0.3.0: Add the ability to deploy Windows VMs with private registry-protected images
@@ -54,6 +55,7 @@ This chart is used to set up Edge GitOps VMs in conjunction with OpenShift Virtu
 | vmDefaults.externalDataVolumeAnnodations."cdi.kubevirt.io/storage.bind.immediate.requested" | string | `"true"` |  |
 | vmDefaults.flavor | string | `"medium"` |  |
 | vmDefaults.machineType | string | `"pc-q35-rhel8.4.0"` |  |
+| vmDefaults.mainDiskStorageBus | string | `"virtio"` |  |
 | vmDefaults.memory | string | `"4Gi"` |  |
 | vmDefaults.os | string | `"rhel8"` |  |
 | vmDefaults.ports[0].name | string | `"ssh"` |  |

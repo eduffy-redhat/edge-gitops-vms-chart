@@ -21,6 +21,8 @@ vmDefaults:
   storageClassName: "ocs-storagecluster-ceph-rbd-virtualization"
   volumeMode: "Block"
   count: 1
+  # Could also be sata
+  mainDiskStorageBus: virtio
   flavor: medium
   workload: desktop
   os: rhel8
