@@ -1,6 +1,6 @@
 # edge-gitops-vms
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Edge GitOps VMs
 
@@ -8,6 +8,7 @@ This chart is used to set up Edge GitOps VMs in conjunction with OpenShift Virtu
 
 ### Notable changes
 
+* v0.3.2: Add EFI as an option as either a default or vm-specific option
 * v0.3.1: Fix some templating errors
 * v0.3.0: Add the ability to deploy Windows VMs with private registry-protected images
 * v0.2.10: Add additional labelling capabilities to apply labels to other objects. Make external secrets optional.
@@ -49,6 +50,7 @@ This chart is used to set up Edge GitOps VMs in conjunction with OpenShift Virtu
 | vmDefaults.cloudinitsecret | string | `"secret/data/hub/cloud-init"` |  |
 | vmDefaults.cores | int | `1` |  |
 | vmDefaults.count | int | `1` |  |
+| vmDefaults.efi | bool | `false` |  |
 | vmDefaults.externalDataVolumeAnnodations."cdi.kubevirt.io/storage.bind.immediate.requested" | string | `"true"` |  |
 | vmDefaults.flavor | string | `"medium"` |  |
 | vmDefaults.machineType | string | `"pc-q35-rhel8.4.0"` |  |
