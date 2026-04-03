@@ -158,7 +158,7 @@ spec:
           {{- end }}
           disks:
           - disk:
-              bus: {{ coalesce $def.mainDiskStorageBus $vmr.mainDiskStorageBus }}
+              bus: {{ coalesce $vmr.mainDiskStorageBus $def.mainDiskStorageBus }}
             name: {{ $identifier }}
           {{- if not $.Values.disableExternalSecrets }}
           - disk:
