@@ -104,7 +104,7 @@ spec:
     spec:
       sourceRef:
         kind: DataSource
-        name: {{ coalesce $vmr.dataSource $def.dataSource $vmr.os $def.os }}
+        name: {{ coalesce $vmr.dataVolume $def.dataVolume $vmr.os $def.os }}
         namespace: {{ $.Values.vmNamespace }}
       pvc:
         accessModes:

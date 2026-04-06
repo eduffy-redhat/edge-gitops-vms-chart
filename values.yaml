@@ -55,7 +55,6 @@ vmDefaults:
       protocol: TCP
       targetPort: 22
   routes: {}
-  dataSource: quay-windows
   # The following keys can be used/set in the route map
   # name (defaults to vm-name)
   # targetPort (no default)
@@ -81,7 +80,6 @@ vms:
   ubuntu:
     os: ubuntu
     dataVolume: quay-ubuntu
-    dataSource: quay-ubuntu
     role: test1
     count: 2
 
