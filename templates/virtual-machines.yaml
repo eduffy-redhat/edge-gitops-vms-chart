@@ -94,6 +94,7 @@ metadata:
     {{ $lbl_k | quote }}: {{ $lbl_v | quote }}
     {{- end }}
   name: {{ $identifier }}
+  namespace: {{ $.Values.vmNamespace }}
 spec:
   dataVolumeTemplates:
   - apiVersion: cdi.kubevirt.io/v1beta1
@@ -104,17 +105,13 @@ spec:
       sourceRef:
         kind: DataSource
         name: {{ coalesce $vmr.dataSource $def.dataSource $vmr.os $def.os }}
-        namespace: openshift-virtualization-os-images
+        namespace: {{ $.Values.vmNamespace }}
       pvc:
         accessModes:
           - {{ coalesce $vmr.accessMode $def.accessMode }}
         resources:
           requests:
-            {{- if $vmr.dataVolume }}
-            storage: {{ $vmr.dataVolume }}-dv
-            {{- else }}
             storage: {{ coalesce $vmr.storage $def.storage }}
-            {{- end }}
         storageClassName: {{ coalesce $vmr.storageClassName $def.storageClassName }}
         volumeMode: {{ coalesce $vmr.volumeMode $def.volumeMode }}
   running: true

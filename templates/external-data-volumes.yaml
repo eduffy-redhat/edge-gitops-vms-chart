@@ -4,9 +4,9 @@
 apiVersion: cdi.kubevirt.io/v1beta1
 kind: DataVolume
 metadata:
-  name: {{ $edv.name }}-dv
-  {{- if (coalesce $edv.namespace $def.externaldatavolumenamespace nil) }}
-  namespace: {{ coalesce $edv.namespace $def.externaldatavolumenamespace }}
+  name: {{ $edv.name }}
+  {{- if (coalesce $edv.namespace $def.externalDataVolumeNamespace nil) }}
+  namespace: {{ coalesce $edv.namespace $def.externalDataVolumeNamespace }}
   {{- end }}
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -22,7 +22,7 @@ spec:
     registry:
       url: {{ $edv.url }}
       {{- if $edv.registryCredentialsSecret }}
-      secretRef: {{ $edv.registryCredentialsSecret }} 
+      secretRef: {{ $edv.registryCredentialsSecret }}
       {{- end }}
     {{ else if eq (coalesce $edv.type $def.dataVolumeType) "http"}}
     http:
@@ -34,4 +34,95 @@ spec:
       requests:
         storage: {{ $edv.size }}
   {{- end }}
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataSource
+metadata:
+  name: {{ $edv.name }}
+  namespace: {{ $.Values.vmNamespace }} # should be the same as the VMs
+  annotations:
+    cdi.kubevirt.io/storage.bind.immediate.requested: "true"
+spec:
+  source:
+    pvc:
+      name: {{ $edv.name }}
+      namespace: {{ coalesce $edv.namespace $def.externalDataVolumeNamespace }}
+{{- end }}
+
+{{- if gt ( len .Values.externalDataVolumes ) 0 }} # this is needed for DataSources to clone DataVolumes
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: os-images.kubevirt.io:view
+  {{- if (coalesce $def.externalDataVolumeNamespace nil) }} # FIXME this will not create Roles for the namespaces of individual datavolumes, just the default namespace
+  namespace: {{ coalesce $def.externalDataVolumeNamespace }}
+  {{- end }}
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - persistentvolumeclaims
+  - persistentvolumeclaims/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cdi.kubevirt.io
+  resources:
+  - datavolumes
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cdi.kubevirt.io
+  resources:
+  - datavolumes/source
+  verbs:
+  - create
+- apiGroups:
+  - cdi.kubevirt.io
+  resources:
+  - datasources
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cdi.kubevirt.io
+  resources:
+  - dataimportcrons
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: os-images.kubevirt.io:view
+  {{- if (coalesce $def.externalDataVolumeNamespace nil) }} # FIXME see above
+  namespace: {{ coalesce $def.externalDataVolumeNamespace }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: os-images.kubevirt.io:view
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: system:authenticated
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: system:serviceaccounts
 {{- end }}
