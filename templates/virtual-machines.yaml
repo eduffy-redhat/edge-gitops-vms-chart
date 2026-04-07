@@ -8,6 +8,9 @@ apiVersion: "external-secrets.io/v1beta1"
 kind: ExternalSecret
 metadata:
   name: es-cloudinit-{{ $role }}
+  {{- if $.Values.vmNamespace }}
+  namespace: {{ $.Values.vmNamespace }}
+  {{- end }}
   annotations:
     argocd.argoproj.io/sync-wave: "2"
   {{- $extraLabels := coalesce $vmr.extraLabels $def.extraLabels nil }}
@@ -38,6 +41,9 @@ apiVersion: "external-secrets.io/v1beta1"
 kind: ExternalSecret
 metadata:
   name: es-authorizedsshkeys-{{ $identifier }}
+  {{- if $.Values.vmNamespace }}
+  namespace: {{ $.Values.vmNamespace }}
+  {{- end }}
   annotations:
     argocd.argoproj.io/sync-wave: "2"
   {{- $extraLabels := coalesce $vmr.extraLabels $def.extraLabels nil }}
@@ -94,7 +100,9 @@ metadata:
     {{ $lbl_k | quote }}: {{ $lbl_v | quote }}
     {{- end }}
   name: {{ $identifier }}
+  {{- if $.Values.vmNamespace }}
   namespace: {{ $.Values.vmNamespace }}
+  {{- end }}
 spec:
   dataVolumeTemplates:
   - apiVersion: cdi.kubevirt.io/v1beta1
@@ -105,7 +113,7 @@ spec:
       sourceRef:
         kind: DataSource
         name: {{ coalesce $vmr.dataVolume $def.dataVolume $vmr.os $def.os }}
-        namespace: {{ $.Values.vmNamespace }}
+        namespace: {{ $def.externalDataVolumeNamespace }}
       pvc:
         accessModes:
           - {{ coalesce $vmr.accessMode $def.accessMode }}
@@ -198,6 +206,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ $identifier }}
+  {{- if $.Values.vmNamespace }}
+  namespace: {{ $.Values.vmNamespace }}
+  {{- end }}
   annotations:
     argocd.argoproj.io/sync-wave: "2"
 {{- if $vmr.externalDNSShortName }}
@@ -228,6 +239,9 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: {{ coalesce $route.name $identifier }}
+  {{- if $.Values.vmNamespace }}
+  namespace: {{ $.Values.vmNamespace }}
+  {{- end }}
   annotations:
     argocd.argoproj.io/sync-wave: "2"
   labels:

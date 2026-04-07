@@ -7,13 +7,14 @@ secretStore:
   name: vault-backend
   kind: ClusterSecretStore
 
-vmNamespace: edge-gitops-vms
+vmNamespace: edge-gitops-vms1
 
-waitForMetalNode: true
-jobTerminationGracePeriod: 3600
+waitForMetalNode: false
+jobTerminationGracePeriod: 30
 
 vmDefaults:
   role: generic
+  externalDataVolumeNamespace: openshift-virtualization-os-images
   externalDataVolumeAnnodations:
     cdi.kubevirt.io/storage.bind.immediate.requested: "true"
   cloudInitSecret: secret/data/hub/cloud-init #checkov:skip=CKV_SECRET_6:External Secret
@@ -22,12 +23,12 @@ vmDefaults:
   volumeMode: "Block"
   count: 1
   # Could also be sata
-  mainDiskStorageBus: virtio
+  mainDiskStorageBus: sata
   flavor: medium
   workload: desktop
   os: rhel8
   efi: false
-  storage: 30Gi
+  storage: 50Gi
   memory: 4Gi
   machineType: pc-q35-rhel8.4.0
   cores: 1
@@ -64,22 +65,40 @@ vmDefaults:
 
 # Define the VMs you want to create with any specific attributes from vmDefaults
 # in an overrides file.
-vms: {}
+vms:
+  win1:
+    os: windows
+    dataVolume: quay-windows
+    role: test1
+    storageBus: sata
+  win2:
+    os: windows
+    dataVolume: quay-windows
+    role: test2
+    count: 2
+    storageBus: sata
+  ubuntu:
+    os: ubuntu
+    dataVolume: quay-ubuntu
+    role: test1
+    count: 2
 
-registryCredentialExternalSecrets: {}
-# EXAMPLE
-#   quay-creds:
-#     vaultKey: 'hub/quay-creds'
 
-externalDataVolumes: {}
-# EXAMPLE externalDataVolumes:
+registryCredentialExternalSecrets:
+  quay-creds:
+    vaultKey: 'hub/quay-creds'
 
-# Example pulled from quay
-#   - name: quay-windows
-#     type: registry
-#     url: "docker://quay.io/eduffy/win2k22-dv:thin"
-#     size: 50G
-#     registryCredentialsSecret: quay-creds # You will need to create either manually or using registryCredentialExternalSecrets above
+externalDataVolumes:
+  - name: quay-windows
+    type: registry
+    url: "docker://quay.io/eduffy/win2k22-dv:thin"
+    size: 50G
+    registryCredentialsSecret: quay-creds # You will need to create either manually or using registryCredentialExternalSecrets above
+  - name: quay-ubuntu
+    type: registry
+    url: "docker://quay.io/eduffy/ubuntu-2404-dv:thin"
+    size: 50G
+    registryCredentialsSecret: quay-creds # You will need to create either manually or using registryCredentialExternalSecrets above
 
 # Example downloaded from url
 #    - name: ubuntu-installer
