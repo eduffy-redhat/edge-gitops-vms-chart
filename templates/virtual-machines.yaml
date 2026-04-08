@@ -113,7 +113,7 @@ spec:
       sourceRef:
         kind: DataSource
         name: {{ coalesce $vmr.dataVolume $def.dataVolume $vmr.os $def.os }}
-        namespace: {{ $def.externalDataVolumeNamespace }}
+        namespace: {{ $def.externalDataSourceNamespace }}
       pvc:
         accessModes:
           - {{ coalesce $vmr.accessMode $def.accessMode }}

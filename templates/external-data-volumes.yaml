@@ -1,15 +1,15 @@
 {{- $def := .Values.vmDefaults }}
-{{- range $edvc, $edv := .Values.externalDataVolumes }}
+{{- range $edvc, $edv := .Values.externalDataSources }}
 ---
 apiVersion: cdi.kubevirt.io/v1beta1
 kind: DataVolume
 metadata:
   name: {{ $edv.name }}
-  namespace: {{ coalesce $edv.namespace $def.externalDataVolumeNamespace }}
+  namespace: {{ coalesce $edv.namespace $def.externalDataSourceNamespace }}
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-  {{- if $def.externalDataVolumeAnnodations }}
-    {{ $def.externalDataVolumeAnnodations | toYaml }}
+  {{- if $def.externalDataSourceAnnodations }}
+    {{ $def.externalDataSourceAnnodations | toYaml }}
   {{- end }}
   {{- if $edv.annotations }}
     {{ $edv.annotations |toYaml }}
@@ -37,17 +37,17 @@ apiVersion: cdi.kubevirt.io/v1beta1
 kind: DataSource
 metadata:
   name: {{ $edv.name }}
-  namespace: {{ coalesce $edv.namespace $def.externalDataVolumeNamespace }}
+  namespace: {{ coalesce $edv.namespace $def.externalDataSourceNamespace }}
   annotations:
     cdi.kubevirt.io/storage.bind.immediate.requested: "true"
 spec:
   source:
     pvc:
       name: {{ $edv.name }}
-      namespace: {{ coalesce $edv.namespace $def.externalDataVolumeNamespace }}
+      namespace: {{ coalesce $edv.namespace $def.externalDataSourceNamespace }}
 {{- end }}
 
-{{- if gt ( len .Values.externalDataVolumes ) 0 }} # this is needed for DataSources to clone DataVolumes
+{{- if gt ( len .Values.externalDataSources ) 0 }} # this is needed for DataSources to clone DataVolumes
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
