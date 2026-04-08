@@ -50,12 +50,9 @@ spec:
 {{- if gt ( len .Values.externalDataVolumes ) 0 }} # this is needed for DataSources to clone DataVolumes
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   name: os-images.kubevirt.io:view
-  {{- if (coalesce $def.externalDataVolumeNamespace nil) }} # FIXME this will not create Roles for the namespaces of individual datavolumes, just the default namespace
-  namespace: {{ coalesce $def.externalDataVolumeNamespace }}
-  {{- end }}
 rules:
 - apiGroups:
   - ""
@@ -106,15 +103,12 @@ rules:
   - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
   name: os-images.kubevirt.io:view
-  {{- if (coalesce $def.externalDataVolumeNamespace nil) }} # FIXME see above
-  namespace: {{ coalesce $def.externalDataVolumeNamespace }}
-  {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: os-images.kubevirt.io:view
 subjects:
 - apiGroup: rbac.authorization.k8s.io
