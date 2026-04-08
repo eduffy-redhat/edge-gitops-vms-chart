@@ -53,7 +53,7 @@ This chart is used to set up Edge GitOps VMs in conjunction with OpenShift Virtu
 | vmDefaults.cores | int | `1` |  |
 | vmDefaults.count | int | `1` |  |
 | vmDefaults.efi | bool | `false` |  |
-| vmDefaults.externalDataSourceAnnodations."cdi.kubevirt.io/storage.bind.immediate.requested" | string | `"true"` |  |
+| vmDefaults.externalDataSourceAnnotations."cdi.kubevirt.io/storage.bind.immediate.requested" | string | `"true"` |  |
 | vmDefaults.flavor | string | `"medium"` |  |
 | vmDefaults.machineType | string | `"pc-q35-rhel8.4.0"` |  |
 | vmDefaults.mainDiskStorageBus | string | `"virtio"` |  |

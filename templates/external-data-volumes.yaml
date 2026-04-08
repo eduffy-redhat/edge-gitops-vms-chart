@@ -8,8 +8,8 @@ metadata:
   namespace: {{ coalesce $edv.namespace $def.externalDataSourceNamespace }}
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-  {{- if $def.externalDataSourceAnnodations }}
-    {{ $def.externalDataSourceAnnodations | toYaml }}
+  {{- if $def.externalDataSourceAnnotations }}
+    {{ $def.externalDataSourceAnnotations | toYaml }}
   {{- end }}
   {{- if $edv.annotations }}
     {{ $edv.annotations |toYaml }}
